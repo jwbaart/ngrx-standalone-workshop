@@ -10,6 +10,7 @@ import { productsReducer } from "./app/product/product.reducer";
 import { provideEffects } from "@ngrx/effects";
 import { ProductEffects } from "./app/product/product.effect";
 import * as errorEffects from "./app/error.effects";
+import * as cartEffects from "./app/cart/cart.effect";
 import { CART_FEATURE_KEY, cartReducer } from "./app/cart/cart.reducer";
 
 bootstrapApplication(AppComponent, {
@@ -18,7 +19,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(),
     provideAnimations(),
     provideStore({ product: productsReducer }),
-    provideEffects(ProductEffects, errorEffects),
+    provideEffects(ProductEffects, errorEffects, cartEffects),
     provideState(CART_FEATURE_KEY, cartReducer),
     provideStoreDevtools(),
   ],

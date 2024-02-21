@@ -1,6 +1,7 @@
 import { CartItem } from "@angular-monorepo/api-interfaces";
 import { createReducer, on } from "@ngrx/store";
 import { productDetailsActions } from "../product/product-details/actions";
+import { cartActions } from "./actions";
 
 export const CART_FEATURE_KEY = "cart";
 
@@ -35,5 +36,9 @@ export const cartReducer = createReducer(
       ...state,
       cartItems: cartItemsClone,
     };
-  })
+  }),
+  on(cartActions.fetchCartItemsSuccess, (state, { cartItems }) => ({
+    ...state,
+    cartItems: [...cartItems],
+  }))
 );
