@@ -11,6 +11,10 @@ import { SpinnerComponent } from "../../common/spinner/spinner.component";
 import { RouterLink } from "@angular/router";
 import { MatCardModule } from "@angular/material/card";
 import { AsyncPipe, CommonModule } from "@angular/common";
+import { Store } from "@ngrx/store";
+import { GlobalState } from "../product.reducer";
+import * as productListActions from "./actions";
+import { selectProducts } from "../product.selectors";
 
 @Component({
   selector: "ngrx-workshop-home",
@@ -27,16 +31,21 @@ import { AsyncPipe, CommonModule } from "@angular/common";
   ],
 })
 export class ProductListComponent implements OnInit {
-  products$?: Observable<ProductModel[]>;
+  // products$?: Observable<ProductModel[]>;
+  products$?: Observable<ProductModel[] | undefined> =
+    this.store.select(selectProducts);
   customerRatings$?: Observable<{ [productId: string]: Rating }>;
 
   constructor(
     private readonly productService: ProductService,
-    private readonly ratingService: RatingService
-  ) {}
+    private readonly ratingService: RatingService,
+    private readonly store: Store<GlobalState>
+  ) {
+    this.store.dispatch(productListActions.productsOpened());
+  }
 
   ngOnInit() {
-    this.products$ = this.productService.getProducts();
+    // this.products$ = this.productService.getProducts();
 
     this.customerRatings$ = this.ratingService.getRatings().pipe(
       map((ratingsArray) =>
