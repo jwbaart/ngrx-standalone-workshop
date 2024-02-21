@@ -5,7 +5,6 @@ import { Rating } from "@angular-monorepo/api-interfaces";
 import { RatingService } from "../rating.service";
 
 import { ProductModel } from "../../model/product";
-import { ProductService } from "../product.service";
 import { StarsComponent } from "../../common/stars/stars.component";
 import { SpinnerComponent } from "../../common/spinner/spinner.component";
 import { RouterLink } from "@angular/router";
@@ -37,7 +36,6 @@ export class ProductListComponent implements OnInit {
   customerRatings$?: Observable<{ [productId: string]: Rating }>;
 
   constructor(
-    private readonly productService: ProductService,
     private readonly ratingService: RatingService,
     private readonly store: Store<GlobalState>
   ) {
@@ -45,8 +43,6 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.products$ = this.productService.getProducts();
-
     this.customerRatings$ = this.ratingService.getRatings().pipe(
       map((ratingsArray) =>
         // Convert from Array to Indexable.

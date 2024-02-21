@@ -9,7 +9,6 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Rating } from "@angular-monorepo/api-interfaces";
 import { BehaviorSubject, filter, map, shareReplay, switchMap } from "rxjs";
 
-import { CartService } from "../../cart/cart.service";
 import { ProductService } from "../product.service";
 import { RatingService } from "../rating.service";
 import { MatButtonModule } from "@angular/material/button";
@@ -18,6 +17,8 @@ import { StarsComponent } from "../../common/stars/stars.component";
 import { SpinnerComponent } from "../../common/spinner/spinner.component";
 import { MatCardModule } from "@angular/material/card";
 import { ReviewsComponent } from "./reviews/reviews.component";
+import { Store } from "@ngrx/store";
+import { productDetailsActions } from "./actions";
 
 @Component({
   selector: "ngrx-workshop-product-details",
@@ -56,8 +57,8 @@ export class ProductDetailsComponent {
     private readonly router: ActivatedRoute,
     private readonly productService: ProductService,
     private readonly ratingService: RatingService,
-    private readonly cartService: CartService,
-    private readonly location: Location
+    private readonly location: Location,
+    private readonly store: Store
   ) {
     this.productId$
       .pipe(switchMap((id) => this.ratingService.getRating(id)))
@@ -83,7 +84,7 @@ export class ProductDetailsComponent {
   }
 
   addToCart(productId: string) {
-    this.cartService.addProduct(productId);
+    this.store.dispatch(productDetailsActions.addToCart({ productId }));
   }
 
   back() {

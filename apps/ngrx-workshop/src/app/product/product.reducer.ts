@@ -2,6 +2,7 @@ import { data } from "@angular-monorepo/mock-data";
 import { ProductModel } from "../model/product";
 import * as productListActions from "./product-list/actions";
 import { createReducer, on } from "@ngrx/store";
+import { productApiActions } from "./actions";
 
 export interface GlobalState {
   product: ProductState;
@@ -20,5 +21,13 @@ export const productsReducer = createReducer(
   on(productListActions.productsOpened, (state) => ({
     ...state,
     products: [...data],
+  })),
+  on(productApiActions.productsFetchedSuccess, (state, { products }) => ({
+    ...state,
+    products: [...products],
+  })),
+  on(productApiActions.productsFetchedError, (state) => ({
+    ...state,
+    products: [],
   }))
 );
