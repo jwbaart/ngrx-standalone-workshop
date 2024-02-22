@@ -19,7 +19,7 @@ import { selectCurrentProductId } from "./product.selectors";
 export class ProductEffects {
   constructor(
     private readonly actions$: Actions,
-    private readonly productsService: ProductService,
+    private readonly productService: ProductService,
     private readonly store: Store
   ) {}
 
@@ -27,7 +27,7 @@ export class ProductEffects {
     return this.actions$.pipe(
       ofType(productListActions.productsOpened),
       exhaustMap(() =>
-        this.productsService.getProducts().pipe(
+        this.productService.getProducts().pipe(
           map((products) =>
             productApiActions.productsFetchedSuccess({ products })
           ),
@@ -52,7 +52,7 @@ export class ProductEffects {
           .pipe(filter((id): id is string => id != null))
       ),
       switchMap(([, id]) => {
-        return this.productsService.getProduct(id).pipe(
+        return this.productService.getProduct(id).pipe(
           map((product) =>
             productApiActions.singleProductFetchedSuccess({ product })
           ),
