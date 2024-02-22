@@ -7,14 +7,11 @@ import { CartItem } from "@angular-monorepo/api-interfaces";
 @Injectable({ providedIn: "root" })
 export class CartService {
   private cartItemsSubject$ = new BehaviorSubject<CartItem[]>([]);
-  cartItems$ = this.cartItemsSubject$.asObservable();
 
   constructor(private readonly http: HttpClient) {}
 
-  addProduct(id: string): void {
-    this.http
-      .post<CartItem[]>(`/api/cart/add/${id}`, {})
-      .subscribe((arr) => this.cartItemsSubject$.next(arr));
+  addProduct(id: string): Observable<CartItem[]> {
+    return this.http.post<CartItem[]>(`/api/cart/add/${id}`, {});
   }
 
   removeProduct(id: string): void {
@@ -31,7 +28,6 @@ export class CartService {
 
   getCartProducts(): Observable<CartItem[]> {
     return this.http.get<CartItem[]>(`/api/cart/cart-content`);
-    // .subscribe((arr) => this.cartItemsSubject$.next(arr));
   }
 
   purchase(purchaseItems: CartItem[]): Observable<boolean> {

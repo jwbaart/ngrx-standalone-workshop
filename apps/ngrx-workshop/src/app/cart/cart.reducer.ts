@@ -40,5 +40,20 @@ export const cartReducer = createReducer(
   on(cartActions.fetchCartItemsSuccess, (state, { cartItems }) => ({
     ...state,
     cartItems: [...cartItems],
-  }))
+  })),
+  on(cartActions.addToCartError, (state, { productId }) => {
+    const cartItemsClone = state.cartItems ? [...state.cartItems] : [];
+    const cartItemsIndex = cartItemsClone.findIndex(
+      (cartItem) => cartItem.productId === productId
+    );
+
+    if (cartItemsIndex > -1) {
+      cartItemsClone.splice(cartItemsIndex, 1, {
+        productId,
+        quantity: cartItemsClone[cartItemsIndex].quantity - 1,
+      });
+    }
+
+    return { ...state, cartItems: cartItemsClone };
+  })
 );

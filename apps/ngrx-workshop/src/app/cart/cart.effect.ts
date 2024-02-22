@@ -3,7 +3,8 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { CartService } from "./cart.service";
 import { cartActions } from "./actions";
 import { cartDetailsActions } from "./cart-details/actions";
-import { catchError, map, of, switchMap, timer } from "rxjs";
+import { catchError, map, mergeMap, of, switchMap, timer } from "rxjs";
+import { productDetailsActions } from "../product/product-details/actions";
 
 const REFRESH_CART_ITEMS_INTERVAL_MS = 20_000;
 
@@ -24,6 +25,30 @@ export const fetchCartItems = createEffect(
             of(
               cartActions.fetchCartItemsError({
                 errorMessage: "Error fetching cart items",
+              })
+            )
+          )
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+
+export const addProductToCart = createEffect(
+  () => {
+    const cartService = inject(CartService);
+    return inject(Actions).pipe(
+      ofType(productDetailsActions.addToCart),
+      mergeMap(({ productId }) =>
+        cartService.addProduct(productId).pipe(
+          map(() => cartActions.addToCartSuccess()),
+          // passing the productId to the Error, so it can be restored
+          catchError(() =>
+            of(
+              cartActions.addToCartError({
+                productId,
+                errorMessage: "Error Adding To Cart",
               })
             )
           )
