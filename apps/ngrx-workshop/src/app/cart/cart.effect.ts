@@ -6,7 +6,7 @@ import { cartDetailsActions } from "./cart-details/actions";
 import { catchError, map, mergeMap, of, switchMap, timer } from "rxjs";
 import { productDetailsActions } from "../product/product-details/actions";
 
-const REFRESH_CART_ITEMS_INTERVAL_MS = 20_000;
+const REFRESH_CART_ITEMS_INTERVAL_MS = 200_000;
 
 export const fetchCartItems = createEffect(
   () => {

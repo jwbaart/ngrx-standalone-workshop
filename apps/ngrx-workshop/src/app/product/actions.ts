@@ -6,5 +6,7 @@ export const productApiActions = createActionGroup({
   events: {
     productsFetchedSuccess: props<{ products: BasicProduct[] }>(),
     productsFetchedError: props<{ errorMessage: string }>(),
+    singleProductFetchedSuccess: props<{ product: BasicProduct }>(),
+    singleProductFetchedError: props<{ errorMessage: string }>(),
   },
 });
